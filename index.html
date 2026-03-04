@@ -11,130 +11,121 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --highlight: #0ea5e9;
+            --charge-color: #00ffaa;
         }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            color: var(--text-main);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            transition: background 0.6s ease;
-            padding: 20px;
-            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif; color: var(--text-main);
+            min-height: 100vh; margin: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; overflow-x: hidden;
+            transition: background 0.6s ease; padding: 20px; box-sizing: border-box;
+            user-select: none;
         }
 
         body.theme-wheel { background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); }
         body.theme-slot { background: radial-gradient(circle at center, #450a0a 0%, #1a0202 100%); }
         body.theme-8ball { background: radial-gradient(circle at center, #170f2e 0%, #02010a 100%); }
-        body.theme-horse { background: radial-gradient(circle at center, #064e3b 0%, #022c22 100%); } /* Racing Green */
+        body.theme-horse { background: radial-gradient(circle at center, #064e3b 0%, #022c22 100%); }
 
         h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-            text-align: center;
+            font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 800;
+            margin-bottom: 20px; letter-spacing: -1px; text-align: center;
         }
 
         .container {
-            display: flex;
-            flex-direction: row;
-            gap: 40px;
-            background: var(--glass-bg);
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            align-items: stretch;
-            z-index: 10;
-            max-width: 1000px;
-            width: 100%;
-            box-sizing: border-box;
+            display: flex; flex-direction: row; gap: 30px; background: var(--glass-bg);
+            padding: 30px; border-radius: 24px; border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            align-items: stretch; z-index: 10; max-width: 1080px; width: 100%; box-sizing: border-box;
         }
 
-        /* --- CONTROLS --- */
-        .controls {
-            display: flex; flex-direction: column; gap: 15px;
-            width: 280px; flex-shrink: 0;
-        }
-
+        .controls { display: flex; flex-direction: column; gap: 15px; width: 280px; flex-shrink: 0; }
+        
         label {
             font-size: 0.8rem; font-weight: 700; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1px;
-            display: flex; justify-content: space-between;
+            text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between;
         }
 
         select, textarea {
-            padding: 12px; background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--glass-border); border-radius: 10px;
-            color: white; font-family: inherit; font-size: 1rem;
+            padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--glass-border);
+            border-radius: 10px; color: white; font-family: inherit; font-size: 1rem;
             outline: none; transition: all 0.3s; width: 100%; box-sizing: border-box;
         }
         select:focus, textarea:focus { border-color: var(--highlight); }
         textarea { height: 140px; resize: none; white-space: pre; }
 
         .btn-spin {
-            padding: 16px; border: none; border-radius: 10px;
-            background: var(--highlight); color: white;
-            font-size: 1.2rem; font-weight: 700; cursor: pointer;
-            transition: all 0.2s; text-transform: uppercase; touch-action: manipulation;
+            position: relative; overflow: hidden; padding: 16px; border: none; border-radius: 10px;
+            background: #1e3a8a; color: white; font-size: 1.2rem; font-weight: 900;
+            cursor: pointer; text-transform: uppercase; touch-action: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
         }
-        .btn-spin:active { transform: scale(0.95); }
+        .btn-spin:active { transform: scale(0.97); }
         .btn-spin:disabled, textarea:disabled, select:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .btn-charge-fill {
+            position: absolute; top: 0; left: 0; bottom: 0; width: 0%;
+            background: linear-gradient(90deg, var(--highlight) 0%, var(--charge-color) 100%);
+            z-index: 1; pointer-events: none; transition: width 0.05s linear;
+        }
+        .btn-text { position: relative; z-index: 2; pointer-events: none; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
-        /* --- TOKEN ECONOMY DASHBOARD --- */
         .token-dashboard {
-            background: #0a0a0a; border: 3px solid #111; border-radius: 8px;
-            padding: 12px; text-align: center; font-family: 'Courier New', Courier, monospace;
-            box-shadow: inset 0 0 10px #000; transition: all 0.3s;
-            margin-top: auto; display: none; /* Hidden by default */
+            background: #0a0a0a; border: 3px solid #111; border-radius: 8px; padding: 12px;
+            text-align: center; font-family: 'Courier New', Courier, monospace;
+            box-shadow: inset 0 0 10px #000; transition: all 0.3s; margin-top: auto; display: none; 
         }
-        .token-display {
-            font-size: 1.6rem; font-weight: 900; color: #fbbf24; 
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.6); margin-bottom: 5px;
-        }
+        .token-display { font-size: 1.6rem; font-weight: 900; color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.6); margin-bottom: 5px; }
         .token-info { font-size: 0.75rem; color: #888; font-weight: bold; }
         .dashboard-win { animation: flash-jackpot 0.5s infinite alternate; }
-        @keyframes flash-jackpot {
-            from { background: #0a0a0a; }
-            to { background: #064e3b; box-shadow: inset 0 0 15px #10b981; }
-        }
+        @keyframes flash-jackpot { from { background: #0a0a0a; } to { background: #064e3b; box-shadow: inset 0 0 15px #10b981; } }
 
         .view-container {
             position: relative; display: flex; align-items: center; justify-content: center;
-            width: 440px; height: 440px; flex-grow: 1; flex-direction: column;
+            width: 440px; height: 440px; flex-shrink: 0; flex-direction: column;
         }
 
-        /* --- WHEEL MODE --- */
+        /* --- FAKE ADS PANEL --- */
+        .ads-panel {
+            display: none; width: 220px; flex-shrink: 0; background: #0a0a0a; 
+            border: 2px dashed #ff0055; border-radius: 12px; padding: 15px; 
+            box-sizing: border-box; text-align: center; position: relative;
+            box-shadow: inset 0 0 20px rgba(255, 0, 85, 0.2);
+        }
+        .ads-tag {
+            background: #ff0055; color: white; font-size: 0.6rem; font-weight: 900;
+            padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px;
+            animation: pulse-ad 2s infinite; letter-spacing: 1px;
+        }
+        @keyframes pulse-ad { 0% { opacity: 0.7; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.7; } }
+        .ad-content {
+            font-size: 1.1rem; line-height: 1.4; color: #fff; text-shadow: 0 2px 4px #000;
+            transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 10px;
+        }
+        .ad-content b { color: #facc15; font-size: 1.2rem; }
+
+        /* --- WHEEL DESIGN --- */
         .wheel-wrapper { display: flex; position: relative; align-items: center; justify-content: center; width: 420px; height: 420px;}
-        #wheel { border-radius: 50%; box-shadow: 0 0 30px rgba(0,0,0,0.5); width: 100%; height: 100%; }
+        #wheel { border-radius: 50%; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); width: 100%; height: 100%; }
         .pointer {
-            position: absolute; right: -15px; top: 50%; transform: translateY(-50%);
-            width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-right: 30px solid #ef4444; 
-            z-index: 10; filter: drop-shadow(-2px 2px 5px rgba(0,0,0,0.5));
+            position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+            width: 0; height: 0; border-top: 20px solid transparent; border-bottom: 20px solid transparent; border-right: 40px solid #ef4444; 
+            z-index: 10; filter: drop-shadow(-4px 4px 5px rgba(0,0,0,0.6));
         }
 
-        /* --- SLOT MACHINE MODE --- */
+        /* --- SLOT MACHINE --- */
         .slot-wrapper { display: none; align-items: center; justify-content: center; position: relative; }
         .slot-machine-frame {
             border: 12px solid #b91c1c; border-radius: 20px; padding: 12px;
-            background: #222; box-shadow: 0 0 20px #ef4444, inset 0 0 15px #000; position: relative;
-            width: 340px; display: flex; flex-direction: column; gap: 12px;
+            background: #222; box-shadow: 0 0 20px #ef4444, inset 0 0 15px #000; position: relative; width: 340px; display: flex; flex-direction: column; gap: 12px;
         }
         .slot-lights {
             position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px;
             border: 4px dashed #fbbf24; border-radius: 24px; animation: flash 1s infinite alternate; pointer-events: none;
         }
-        .slot-screen {
-            width: 100%; height: 180px; background: #000; border-radius: 8px; position: relative; overflow: hidden;
-            box-shadow: inset 0 0 30px rgba(0,0,0,1); flex-shrink: 0;
-        }
+        @keyframes flash { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+        .slot-screen { width: 100%; height: 180px; background: #000; border-radius: 8px; position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,0,0,1); flex-shrink: 0; }
         .reels-container { display: flex; width: 100%; height: 100%; position: relative; }
         .reel-divider { width: 6px; background: #111; box-shadow: inset 0 0 5px #000; z-index: 5; }
         .slot-reel { flex: 1; display: flex; flex-direction: column; }
@@ -147,98 +138,54 @@
             position: absolute; top: 50%; left: 0; right: 0; height: 90px; transform: translateY(-50%);
             border-top: 2px solid #ef4444; border-bottom: 2px solid #ef4444; background: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 6;
         }
-        .lever-container {
-            position: absolute; right: -50px; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 140px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-        }
-        .lever-base {
-            position: absolute; bottom: 20px; left: 0; width: 25px; height: 50px; background: #555; border-radius: 8px; box-shadow: inset -2px -2px 5px #222;
-        }
-        .lever-stick {
-            position: absolute; bottom: 45px; left: 8px; width: 8px; height: 80px; background: #ccc; transform-origin: bottom center; transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.6, 1);
-        }
-        .lever-ball {
-            position: absolute; top: -15px; left: -11px; width: 30px; height: 30px; background: #ef4444; border-radius: 50%; box-shadow: inset -3px -3px 8px #991b1b;
-        }
-        .lever-container.pulled .lever-stick { transform: rotate(70deg); }
+        .lever-container { position: absolute; right: -50px; top: 50%; transform: translateY(-50%); width: 40px; height: 140px; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; }
+        .lever-base { position: absolute; bottom: 20px; left: 0; width: 25px; height: 50px; background: #555; border-radius: 8px; box-shadow: inset -2px -2px 5px #222; }
+        .lever-stick { position: absolute; bottom: 45px; left: 8px; width: 8px; height: 80px; background: #ccc; transform-origin: bottom center; }
+        .lever-ball { position: absolute; top: -15px; left: -11px; width: 30px; height: 30px; background: #ef4444; border-radius: 50%; box-shadow: inset -3px -3px 8px #991b1b; }
 
-        /* --- 8-BALL MODE --- */
+        /* --- 8-BALL --- */
         .ball-wrapper { display: none; align-items: center; justify-content: center; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-        .magic-ball {
-            width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 80px 80px, #4a4a5a, #050505);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset -20px -20px 40px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
-        }
+        .magic-ball { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 80px 80px, #4a4a5a, #050505); box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset -20px -20px 40px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; }
         .ball-wrapper.shaking .magic-ball { animation: shake 0.4s infinite; }
-        .magic-window {
-            width: 150px; height: 150px; border-radius: 50%; background: #00001a; border: 6px solid #111;
-            box-shadow: inset 0 0 20px #000; display: flex; align-items: center; justify-content: center; position: relative;
-        }
-        .magic-triangle {
-            width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-top: 85px solid #1e3a8a;
-            position: relative; opacity: 0; transition: opacity 2s ease-in; filter: drop-shadow(0 0 10px rgba(30, 58, 138, 0.8));
-        }
+        @keyframes shake { 0% { transform: translate(2px, 2px); } 25% { transform: translate(-4px, 0px); } 50% { transform: translate(3px, -3px); } 75% { transform: translate(-2px, 4px); } 100% { transform: translate(2px, -2px); } }
+        .magic-window { width: 150px; height: 150px; border-radius: 50%; background: #00001a; border: 6px solid #111; box-shadow: inset 0 0 20px #000; display: flex; align-items: center; justify-content: center; position: relative; }
+        .magic-triangle { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-top: 85px solid #1e3a8a; position: relative; opacity: 0; transition: opacity 2s ease-in; filter: drop-shadow(0 0 10px rgba(30, 58, 138, 0.8)); }
         .magic-triangle.revealed { opacity: 1; }
-        .magic-text {
-            position: absolute; top: -75px; left: -40px; width: 80px; text-align: center; color: #93c5fd; font-size: 13px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; height: 50px; text-shadow: 0 0 5px rgba(147, 197, 253, 0.5); overflow: hidden;
-        }
+        .magic-text { position: absolute; top: -75px; left: -40px; width: 80px; text-align: center; color: #93c5fd; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; height: 50px; text-shadow: 0 0 5px rgba(147, 197, 253, 0.5); overflow: hidden; }
 
-        /* --- HORSE RACING MODE --- */
+        /* --- HORSE RACING --- */
         .horse-wrapper { display: none; width: 100%; height: 100%; flex-direction: column; gap: 15px; }
+        .horse-betting-panel { background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
         
-        .horse-betting-panel {
-            background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 10px;
+        .horse-bet-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .bet-btn {
+            background: rgba(0,0,0,0.6); border: 2px solid; color: white; padding: 8px 12px; 
+            border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: bold; font-size: 0.85rem;
         }
-        .horse-track-container {
-            flex-grow: 1; background: #78350f; border: 6px solid #451a03; border-radius: 12px;
-            position: relative; overflow: hidden; display: flex; flex-direction: column;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        .bet-btn.active {
+            background: var(--btn-color); color: #000; box-shadow: 0 0 15px var(--btn-color); transform: scale(1.05);
         }
-        .horse-lane {
-            flex: 1; border-bottom: 2px dashed rgba(255,255,255,0.2); position: relative;
-            display: flex; align-items: center;
-        }
-        .horse-lane:last-child { border-bottom: none; }
-        .finish-line-visual {
-            position: absolute; right: 20px; top: 0; bottom: 0; width: 15px;
-            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #000 10px, #000 20px); z-index: 1;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-        }
-        .horse-sprite {
-            position: absolute; left: 5px; font-size: 2rem; z-index: 2; display: flex; align-items: center;
-            transform: translateX(0px); /* Animated via JS */
-        }
-        .horse-name {
-            font-size: 0.8rem; font-weight: bold; background: rgba(0,0,0,0.7); color: white;
-            padding: 3px 6px; border-radius: 4px; margin-left: -5px; margin-top: -15px; white-space: nowrap;
-            max-width: 80px; overflow: hidden; text-overflow: ellipsis; border: 1px solid #555;
-        }
-        /* Color coding horses */
-        .horse-lane:nth-child(1) .horse-name { border-color: #ef4444; color: #fca5a5;}
-        .horse-lane:nth-child(2) .horse-name { border-color: #3b82f6; color: #93c5fd;}
-        .horse-lane:nth-child(3) .horse-name { border-color: #10b981; color: #6ee7b7;}
-        .horse-lane:nth-child(4) .horse-name { border-color: #f59e0b; color: #fcd34d;}
-        .horse-lane:nth-child(5) .horse-name { border-color: #8b5cf6; color: #c4b5fd;}
 
-        /* --- UI OVERLAYS --- */
-        #result {
-            margin-top: 20px; font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800;
-            min-height: 40px; text-align: center; z-index: 10; padding: 0 10px; width: 100%;
-        }
+        .horse-track-container { flex-grow: 1; background: #78350f; border: 6px solid #451a03; border-radius: 12px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+        .horse-lane { flex: 1; border-bottom: 2px dashed rgba(255,255,255,0.2); position: relative; display: flex; align-items: center; }
+        .horse-lane:last-child { border-bottom: none; }
+        .finish-line-visual { position: absolute; right: 20px; top: 0; bottom: 0; width: 15px; background: repeating-linear-gradient(45deg, #fff, #fff 10px, #000 10px, #000 20px); z-index: 1; box-shadow: -2px 0 5px rgba(0,0,0,0.5); }
+        .horse-sprite { position: absolute; left: 5px; font-size: 2rem; z-index: 2; display: flex; align-items: center; }
+        .horse-name { font-size: 0.8rem; font-weight: bold; background: rgba(0,0,0,0.8); color: white; padding: 3px 6px; border-radius: 4px; margin-left: -5px; margin-top: -15px; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis; border: 1px solid; }
+
+        #result { margin-top: 20px; font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; min-height: 40px; text-align: center; z-index: 10; padding: 0 10px; width: 100%; }
         .winner-active { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: #10b981; }
         .loser-active { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: #ef4444; }
         @keyframes pop-in { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .status { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: -5px; }
         #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-        @media (max-width: 768px) {
-            .container { flex-direction: column; gap: 20px; padding: 20px; }
-            .controls { width: 100%; }
-            .view-container { width: 100%; height: 380px; }
-            .wheel-wrapper { transform: scale(0.75); }
-            .slot-wrapper { transform: scale(0.85); transform-origin: center center; margin-left: -10px; }
-            .ball-wrapper { transform: scale(0.8); }
+        @media (max-width: 900px) {
+            .container { flex-direction: column; gap: 20px; padding: 20px; align-items: center; }
+            .controls, .ads-panel { width: 100%; max-width: 440px; }
+            .view-container { width: 100%; max-width: 440px; height: 400px; }
+            .wheel-wrapper { transform: scale(0.85); }
+            .slot-wrapper { transform: scale(0.9); transform-origin: center center; }
         }
     </style>
 </head>
@@ -257,13 +204,16 @@
                 <option value="8ball">🎱 Magic 8-Ball</option>
             </select>
 
-            <label for="items">
-                <span>Entries</span>
-                <span id="entryCount">0 / 100</span>
-            </label>
+            <label for="items"><span>Entries</span><span id="entryCount">0 / 100</span></label>
             <textarea id="items" oninput="updateView()" placeholder="Enter items..."></textarea>
             
-            <button id="spinBtn" class="btn-spin" onclick="spin()">Spin Wheel</button>
+            <button id="spinBtn" class="btn-spin" 
+                onpointerdown="startCharge(event)" 
+                onpointerup="releaseCharge(event)" 
+                onpointerleave="cancelCharge(event)">
+                <div id="btnChargeFill" class="btn-charge-fill"></div>
+                <span id="btnText" class="btn-text">Hold to Spin</span>
+            </button>
             <div id="status" class="status">Waiting for input...</div>
 
             <div id="tokenDashboard" class="token-dashboard">
@@ -273,10 +223,7 @@
         </div>
 
         <div class="view-container">
-            <div id="wheelWrapper" class="wheel-wrapper">
-                <canvas id="wheel" width="420" height="420"></canvas>
-                <div class="pointer"></div>
-            </div>
+            <div id="wheelWrapper" class="wheel-wrapper"><canvas id="wheel" width="420" height="420"></canvas><div class="pointer"></div></div>
 
             <div id="slotWrapper" class="slot-wrapper">
                 <div class="slot-machine-frame">
@@ -289,9 +236,8 @@
                             <div id="slotReel2" class="slot-reel"></div>
                         </div>
                     </div>
-                    <div id="lever" class="lever-container" onclick="spin()" ontouchstart="spin()">
-                        <div class="lever-base"></div>
-                        <div class="lever-stick"><div class="lever-ball"></div></div>
+                    <div id="lever" class="lever-container" onpointerdown="startCharge(event)" onpointerup="releaseCharge(event)" onpointerleave="cancelCharge(event)">
+                        <div class="lever-base"></div><div id="leverStick" class="lever-stick"><div class="lever-ball"></div></div>
                     </div>
                 </div>
             </div>
@@ -299,24 +245,22 @@
             <div id="horseWrapper" class="horse-wrapper">
                 <div class="horse-betting-panel">
                     <label style="color:white; margin:0;">Place Your Bet:</label>
-                    <select id="horseBetSelect"></select>
+                    <div id="horseBetButtons" class="horse-bet-buttons"></div>
                 </div>
                 <div class="horse-track-container">
                     <div class="finish-line-visual"></div>
-                    <div id="horseTracksArea" style="display:flex; flex-direction:column; height:100%;">
-                        </div>
+                    <div id="horseTracksArea" style="display:flex; flex-direction:column; height:100%;"></div>
                 </div>
             </div>
 
-            <div id="ballWrapper" class="ball-wrapper" onclick="spin()" ontouchstart="spin()">
-                <div class="magic-ball">
-                    <div class="magic-window">
-                        <div id="magicTriangle" class="magic-triangle">
-                            <div id="magicText" class="magic-text"></div>
-                        </div>
-                    </div>
-                </div>
+            <div id="ballWrapper" class="ball-wrapper" onclick="triggerImmediateSpin()">
+                <div class="magic-ball"><div class="magic-window"><div id="magicTriangle" class="magic-triangle"><div id="magicText" class="magic-text"></div></div></div></div>
             </div>
+        </div>
+
+        <div id="adsPanel" class="ads-panel">
+            <div class="ads-tag">ADVERTISEMENT</div>
+            <div id="adText" class="ad-content"></div>
         </div>
     </div>
     
@@ -327,6 +271,8 @@
         const itemInput = document.getElementById('items');
         const entryCount = document.getElementById('entryCount');
         const spinBtn = document.getElementById('spinBtn');
+        const btnChargeFill = document.getElementById('btnChargeFill');
+        const btnText = document.getElementById('btnText');
         const resultDiv = document.getElementById('result');
         const statusDiv = document.getElementById('status');
         
@@ -334,6 +280,7 @@
         const slotWrapper = document.getElementById('slotWrapper');
         const horseWrapper = document.getElementById('horseWrapper');
         const ballWrapper = document.getElementById('ballWrapper');
+        const adsPanel = document.getElementById('adsPanel');
         
         const tokenDashboard = document.getElementById('tokenDashboard');
         const tokenDisplay = document.getElementById('tokenDisplay');
@@ -342,35 +289,100 @@
         const canvas = document.getElementById('wheel');
         const ctx = canvas.getContext('2d');
         const slotReels = [document.getElementById('slotReel0'), document.getElementById('slotReel1'), document.getElementById('slotReel2')];
-        const lever = document.getElementById('lever');
+        const leverStick = document.getElementById('leverStick');
         const horseTracksArea = document.getElementById('horseTracksArea');
-        const horseBetSelect = document.getElementById('horseBetSelect');
+        const horseBetButtons = document.getElementById('horseBetButtons');
         const magicTriangle = document.getElementById('magicTriangle');
         const magicText = document.getElementById('magicText');
 
         let items = [];
         let currentMode = 'wheel';
         let isSpinning = false;
+        let selectedHorseBet = 0; // The index of the horse they bet on
         
+        // --- CHARGE MECHANICS ---
+        let isCharging = false;
+        let chargeValue = 0;
+        let chargeInterval;
+
+        function startCharge(e) {
+            if (e.button !== 0 && e.type !== 'touchstart' && e.type !== 'pointerdown') return; 
+            if (isSpinning || items.length === 0 || items[0] === 'Empty') return;
+            initAudio(); 
+            isCharging = true; chargeValue = 0; statusDiv.innerText = "Charging...";
+            
+            chargeInterval = setInterval(() => {
+                chargeValue += 1.5; 
+                if (chargeValue > 100) chargeValue = 100;
+                if (currentMode === 'wheel') {
+                    btnChargeFill.style.width = `${chargeValue}%`;
+                } else if (currentMode === 'slot') {
+                    leverStick.style.transform = `rotate(${(chargeValue / 100) * 70}deg)`;
+                }
+            }, 20);
+        }
+
+        function releaseCharge(e) {
+            if (!isCharging) return;
+            isCharging = false; clearInterval(chargeInterval);
+            const finalCharge = Math.max(chargeValue, 2); 
+            
+            btnChargeFill.style.width = `0%`;
+            if(currentMode === 'slot') {
+                leverStick.style.transition = 'transform 0.1s';
+                leverStick.style.transform = `rotate(0deg)`;
+                setTimeout(()=> leverStick.style.transition = 'transform 0.4s', 150);
+            }
+            spin(finalCharge);
+        }
+
+        function cancelCharge(e) { if(isCharging) releaseCharge(e); }
+        function triggerImmediateSpin() { if (!isSpinning) { initAudio(); spin(50); } }
+
+        // --- FAKE ADS SYSTEM ---
+        const fakeAdsList = [
+            "📈 <b>99% of gamblers</b> quit right before they hit it BIG. Don't be a statistic!",
+            "🏚️ <b>Rent overdue?</b> Double it at the horse track!",
+            "💍 <b>Wife left you?</b> The Slot Machine will never leave you. 🎰❤️",
+            "📺 <b>Need spins?</b> Sell your grandma's TV today for fast credits!",
+            "🍔 <b>Food is temporary.</b> Jackpots are forever.",
+            "🏦 <b>Second Mortgage?</b> More like Second Chance at the Jackpot!",
+            "🐎 <b>Tip:</b> If you whisper to the screen, the horses run faster.",
+            "💎 <b>Bankrupt?</b> We accept magic 8-balls at the Pawn Shop."
+        ];
+        let adInterval;
+
+        function startAds() {
+            clearInterval(adInterval);
+            document.getElementById('adText').innerHTML = fakeAdsList[Math.floor(Math.random() * fakeAdsList.length)];
+            adInterval = setInterval(() => {
+                const adEl = document.getElementById('adText');
+                adEl.style.opacity = 0;
+                setTimeout(() => {
+                    adEl.innerHTML = fakeAdsList[Math.floor(Math.random() * fakeAdsList.length)];
+                    adEl.style.opacity = 1;
+                }, 300);
+            }, 6500);
+        }
+
+        function stopAds() { clearInterval(adInterval); }
+
+
         let wheelRotation = 0;
         let slotTranslateY = [45, 45, 45]; 
         const slotItemHeight = 90;
         const maxItems = 100;
         const colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#d946ef', '#f43f5e', '#84cc16', '#f97316'];
 
-        // TOKEN ECONOMY
         let userTokens = 500;
         const COSTS = { slot: 10, horse: 20 };
         const REWARDS = { slot: 5000, horse: 250 };
         const defaultItems = "foodcourt\nTahiti\nEuphoria";
 
         function loadData() {
-            const savedMode = localStorage.getItem('trp_mode');
-            if (savedMode) modeSelect.value = savedMode;
-            const savedItems = localStorage.getItem('trp_items');
-            itemInput.value = savedItems !== null ? savedItems : defaultItems;
-            const savedTokens = localStorage.getItem('trp_tokens');
-            if (savedTokens !== null) userTokens = parseInt(savedTokens, 10);
+            const savedMode = localStorage.getItem('trp_mode'); if (savedMode) modeSelect.value = savedMode;
+            const savedItems = localStorage.getItem('trp_items'); itemInput.value = savedItems !== null ? savedItems : defaultItems;
+            const savedTokens = localStorage.getItem('trp_tokens'); if (savedTokens !== null) userTokens = parseInt(savedTokens, 10);
         }
 
         function saveData() {
@@ -380,136 +392,85 @@
         }
 
         function updateTokenUI() {
-            tokenDisplay.innerText = `CREDITS: ${userTokens}`;
-            tokenDashboard.classList.remove('dashboard-win');
-            saveData(); 
+            tokenDisplay.innerText = `CREDITS: ${userTokens}`; tokenDashboard.classList.remove('dashboard-win'); saveData(); 
         }
 
         function triggerWinUI(reward) {
-            userTokens += reward;
-            updateTokenUI();
-            void tokenDashboard.offsetWidth; 
-            tokenDashboard.classList.add('dashboard-win');
+            userTokens += reward; updateTokenUI(); void tokenDashboard.offsetWidth; tokenDashboard.classList.add('dashboard-win');
         }
 
-        // --- AUDIO SYSTEM ---
         let audioCtx;
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
         function playSound(type, param = 0) {
-            if (!audioCtx) return;
-            const now = audioCtx.currentTime;
-
+            if (!audioCtx) return; const now = audioCtx.currentTime;
             if (type === 'tick') {
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(400 + (param * 200), now);
-                osc.frequency.exponentialRampToValueAtTime(10, now + 0.05);
-                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-                osc.start(now); osc.stop(now + 0.05);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400 + (param * 200), now); osc.frequency.exponentialRampToValueAtTime(10, now + 0.05);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05); osc.start(now); osc.stop(now + 0.05);
             } 
             else if (type === 'gallop') {
-                // Low, rapid thuds for horse racing
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'sine'; osc.frequency.setValueAtTime(80, now);
-                osc.frequency.exponentialRampToValueAtTime(20, now + 0.1);
-                gainNode.gain.setValueAtTime(0.5, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(now); osc.stop(now + 0.1);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(80, now); osc.frequency.exponentialRampToValueAtTime(20, now + 0.1);
+                gainNode.gain.setValueAtTime(0.5, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1);
             }
             else if (type === 'trumpet') {
-                // Horse race winning fanfare
-                const notes = [440, 554.37, 659.25, 880]; 
-                notes.forEach((freq, i) => {
-                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                    osc.type = 'square'; osc.frequency.value = freq;
-                    gainNode.gain.setValueAtTime(0, now + i * 0.15); 
-                    gainNode.gain.linearRampToValueAtTime(0.1, now + i * 0.15 + 0.05);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+                [440, 554.37, 659.25, 880].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    osc.type = 'square'; osc.frequency.value = freq; gainNode.gain.setValueAtTime(0, now + i * 0.15); 
+                    gainNode.gain.linearRampToValueAtTime(0.1, now + i * 0.15 + 0.05); gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
                     osc.start(now + i * 0.15); osc.stop(now + i * 0.15 + 0.5);
                 });
             }
             else if (type === 'clack') {
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'square'; osc.frequency.setValueAtTime(150, now);
-                osc.frequency.exponentialRampToValueAtTime(40, now + 0.03);
-                gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.03);
-                osc.start(now); osc.stop(now + 0.03);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.03);
+                gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.03); osc.start(now); osc.stop(now + 0.03);
             }
             else if (type === 'stop') { 
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'square'; osc.frequency.setValueAtTime(100, now);
-                osc.frequency.exponentialRampToValueAtTime(20, now + 0.1);
-                gainNode.gain.setValueAtTime(0.4, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(now); osc.stop(now + 0.1);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'square'; osc.frequency.setValueAtTime(100, now); osc.frequency.exponentialRampToValueAtTime(20, now + 0.1);
+                gainNode.gain.setValueAtTime(0.4, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(now); osc.stop(now + 0.1);
             }
             else if (type === 'rumble') {
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'sine'; osc.frequency.setValueAtTime(60, now);
-                osc.frequency.linearRampToValueAtTime(40, now + 1.5);
-                gainNode.gain.setValueAtTime(0, now); gainNode.gain.linearRampToValueAtTime(0.4, now + 0.2);
-                gainNode.gain.linearRampToValueAtTime(0, now + 1.5);
-                osc.start(now); osc.stop(now + 1.5);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(60, now); osc.frequency.linearRampToValueAtTime(40, now + 1.5);
+                gainNode.gain.setValueAtTime(0, now); gainNode.gain.linearRampToValueAtTime(0.4, now + 0.2); gainNode.gain.linearRampToValueAtTime(0, now + 1.5); osc.start(now); osc.stop(now + 1.5);
             }
             else if (type === 'win-wheel') {
-                const notes = [523.25, 659.25, 783.99, 1046.50];
-                notes.forEach((freq, i) => {
-                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gainNode.gain.setValueAtTime(0, now + i * 0.1); gainNode.gain.linearRampToValueAtTime(0.2, now + i * 0.1 + 0.05);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.6);
-                    osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.6);
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    osc.type = 'sine'; osc.frequency.value = freq; gainNode.gain.setValueAtTime(0, now + i * 0.1); gainNode.gain.linearRampToValueAtTime(0.2, now + i * 0.1 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.6); osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.6);
                 });
             }
             else if (type === 'win-slot') {
                 for (let i = 0; i < 20; i++) {
-                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                    osc.type = 'square'; osc.frequency.value = (i % 2 === 0) ? 1200 : 1600;
-                    gainNode.gain.setValueAtTime(0, now + i * 0.08); gainNode.gain.linearRampToValueAtTime(0.1, now + i * 0.08 + 0.02);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.15);
-                    osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.15);
+                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    osc.type = 'square'; osc.frequency.value = (i % 2 === 0) ? 1200 : 1600; gainNode.gain.setValueAtTime(0, now + i * 0.08); gainNode.gain.linearRampToValueAtTime(0.1, now + i * 0.08 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.15); osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.15);
                 }
             }
             else if (type === 'lose') {
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now);
-                osc.frequency.exponentialRampToValueAtTime(60, now + 0.5);
-                gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-                osc.start(now); osc.stop(now + 0.5);
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.exponentialRampToValueAtTime(60, now + 0.5);
+                gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.5); osc.start(now); osc.stop(now + 0.5);
             }
             else if (type === 'win-8ball') {
                 [440, 554.37, 659.25].forEach((freq) => { 
-                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                    osc.type = 'triangle'; osc.frequency.value = freq + (Math.random() * 4 - 2); 
-                    gainNode.gain.setValueAtTime(0, now); gainNode.gain.linearRampToValueAtTime(0.15, now + 1.0); 
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 3.0); 
-                    osc.start(now); osc.stop(now + 3.0);
+                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    osc.type = 'triangle'; osc.frequency.value = freq + (Math.random() * 4 - 2); gainNode.gain.setValueAtTime(0, now); gainNode.gain.linearRampToValueAtTime(0.15, now + 1.0); 
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 3.0); osc.start(now); osc.stop(now + 3.0);
                 });
             }
         }
-
-        // --- CORE LOGIC ---
 
         function getParsedItems() {
             let rawLines = itemInput.value.split('\n').map(i => i.trim()).filter(i => i !== '');
             if (rawLines.length > maxItems) rawLines = rawLines.slice(0, maxItems);
             if (rawLines.length === 0) rawLines = ['Empty'];
-            
-            // Limit to 5 strictly for horse racing visual sanity
             if (currentMode === 'horse') {
                 rawLines = rawLines.slice(0, 5);
-                if (rawLines.length < 2) rawLines.push('Ghost Horse'); // Needs at least 2 to race
+                if (rawLines.length < 2) rawLines.push('Ghost Horse'); 
             }
             return rawLines;
         }
@@ -522,19 +483,27 @@
             horseWrapper.style.display = currentMode === 'horse' ? 'flex' : 'none';
             ballWrapper.style.display = currentMode === '8ball' ? 'flex' : 'none';
             
-            if (currentMode === 'slot') {
-                spinBtn.style.display = 'none'; statusDiv.innerText = "Pull the lever to spin.";
-                tokenDashboard.style.display = 'block';
-                tokenInfo.innerText = `SPIN: ${COSTS.slot} 🪙 | JACKPOT: ${REWARDS.slot} 🪙`;
-            } else if (currentMode === 'horse') {
-                spinBtn.style.display = 'block'; spinBtn.innerText = "Start Race!"; statusDiv.innerText = "Place bet and start race.";
-                tokenDashboard.style.display = 'block';
-                tokenInfo.innerText = `BET: ${COSTS.horse} 🪙 | WIN: ${REWARDS.horse} 🪙`;
-            } else if (currentMode === '8ball') {
-                spinBtn.style.display = 'block'; spinBtn.innerText = "Shake 8-Ball"; statusDiv.innerText = "Tap or shake the ball.";
-                tokenDashboard.style.display = 'none';
+            spinBtn.style.display = (currentMode === 'slot' || currentMode === '8ball') ? 'none' : 'block';
+            
+            // Handle Ads visibility
+            if (currentMode === 'slot' || currentMode === 'horse') {
+                adsPanel.style.display = 'block';
+                startAds();
             } else {
-                spinBtn.style.display = 'block'; spinBtn.innerText = "Spin Wheel"; statusDiv.innerText = "Ready to spin.";
+                adsPanel.style.display = 'none';
+                stopAds();
+            }
+
+            if (currentMode === 'slot') {
+                statusDiv.innerText = "Hold lever to charge spin.";
+                tokenDashboard.style.display = 'block'; tokenInfo.innerText = `SPIN: ${COSTS.slot} 🪙 | JACKPOT: ${REWARDS.slot} 🪙`;
+            } else if (currentMode === 'horse') {
+                btnText.innerText = "Start Race"; statusDiv.innerText = "Place bet and start race.";
+                tokenDashboard.style.display = 'block'; tokenInfo.innerText = `BET: ${COSTS.horse} 🪙 | WIN: ${REWARDS.horse} 🪙`;
+            } else if (currentMode === '8ball') {
+                statusDiv.innerText = "Tap or shake the ball."; tokenDashboard.style.display = 'none';
+            } else {
+                btnText.innerText = "Hold to Spin"; statusDiv.innerText = "Hold button to charge power.";
                 tokenDashboard.style.display = 'none';
             }
             
@@ -552,37 +521,59 @@
             else if (currentMode === 'slot') drawSlot();
             else if (currentMode === 'horse') drawHorse();
             else if (currentMode === '8ball') magicText.innerText = '';
-            
             saveData(); 
         }
 
         function drawWheel() {
             const centerX = canvas.width / 2; const centerY = canvas.height / 2;
-            const sliceAngle = (2 * Math.PI) / items.length; ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const outerRadius = centerX; const innerRadius = centerX - 18;
+            const sliceAngle = (2 * Math.PI) / items.length; 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath(); ctx.arc(centerX, centerY, outerRadius, 0, 2*Math.PI);
+            const rimGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            rimGrad.addColorStop(0, '#555'); rimGrad.addColorStop(0.5, '#111'); rimGrad.addColorStop(1, '#555');
+            ctx.fillStyle = rimGrad; ctx.fill();
+
+            ctx.save(); ctx.beginPath(); ctx.arc(centerX, centerY, innerRadius, 0, 2*Math.PI); ctx.clip();
             for (let i = 0; i < items.length; i++) {
-                ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, centerX, i * sliceAngle, (i + 1) * sliceAngle);
-                ctx.fillStyle = colors[i % colors.length]; ctx.fill(); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, innerRadius, i * sliceAngle, (i + 1) * sliceAngle);
+                const sliceGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, innerRadius);
+                sliceGrad.addColorStop(0, '#ffffff44'); sliceGrad.addColorStop(1, colors[i % colors.length]);
+                ctx.fillStyle = sliceGrad; ctx.fill();
+                ctx.strokeStyle = '#00000044'; ctx.lineWidth = 1; ctx.stroke();
+                
                 ctx.save(); ctx.translate(centerX, centerY); ctx.rotate(i * sliceAngle + sliceAngle / 2);
                 ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#ffffff'; 
                 const fontSize = items.length > 50 ? 12 : items.length > 25 ? 16 : 22; ctx.font = `bold ${fontSize}px Inter, sans-serif`;
-                ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 4; ctx.fillText(items[i], centerX - 30, 0); ctx.restore();
+                ctx.shadowColor = '#000'; ctx.shadowBlur = 6; ctx.fillText(items[i], innerRadius - 20, 0); ctx.restore();
             }
-            ctx.beginPath(); ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
-            ctx.fillStyle = '#111'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.restore();
+
+            for (let i = 0; i < items.length; i++) {
+                const pegAngle = i * sliceAngle;
+                const pX = centerX + (outerRadius - 9) * Math.cos(pegAngle);
+                const pY = centerY + (outerRadius - 9) * Math.sin(pegAngle);
+                ctx.beginPath(); ctx.arc(pX, pY, 4, 0, 2*Math.PI);
+                ctx.fillStyle = '#fff'; ctx.shadowColor = '#fcd34d'; ctx.shadowBlur = 10; ctx.fill();
+            }
+
+            ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.beginPath(); ctx.arc(centerX, centerY, 25, 0, Math.PI * 2);
+            const capGrad = ctx.createRadialGradient(centerX, centerY - 10, 0, centerX, centerY, 25);
+            capGrad.addColorStop(0, '#fde047'); capGrad.addColorStop(1, '#b45309');
+            ctx.fillStyle = capGrad; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
         }
 
         function drawSlot() {
             const baseCycles = Math.ceil(40 / items.length);
             const neededLoops = Math.max(20, baseCycles + 15); 
-            
             slotReels.forEach((reel, reelIdx) => {
                 reel.innerHTML = '';
                 for(let loop = 0; loop < neededLoops; loop++) {
                     items.forEach((text, index) => {
-                        const div = document.createElement('div');
-                        div.className = 'slot-item'; div.innerText = text;
-                        div.style.color = colors[index % colors.length];
-                        reel.appendChild(div);
+                        const div = document.createElement('div'); div.className = 'slot-item'; div.innerText = text;
+                        div.style.color = colors[index % colors.length]; reel.appendChild(div);
                     });
                 }
                 slotTranslateY[reelIdx] = 45; reel.style.transform = `translateY(45px)`;
@@ -590,23 +581,30 @@
         }
 
         function drawHorse() {
-            horseTracksArea.innerHTML = '';
-            horseBetSelect.innerHTML = '';
+            horseTracksArea.innerHTML = ''; horseBetButtons.innerHTML = '';
+            selectedHorseBet = 0; // Default reset
             
             items.forEach((item, index) => {
-                // Populate Betting Dropdown
-                const opt = document.createElement('option');
-                opt.value = index; opt.innerText = item;
-                horseBetSelect.appendChild(opt);
+                const itemColor = colors[index % colors.length];
 
-                // Populate Track Lanes
-                const lane = document.createElement('div');
-                lane.className = 'horse-lane';
-                lane.innerHTML = `
-                    <div class="horse-sprite" id="horseSprite${index}">
-                        🐎<div class="horse-name">${item}</div>
-                    </div>
-                `;
+                // Create interactive Neon Buttons instead of dropdown
+                const btn = document.createElement('button');
+                btn.className = `bet-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerText = item;
+                btn.style.borderColor = itemColor;
+                btn.style.setProperty('--btn-color', itemColor);
+                btn.onclick = () => {
+                    if(isSpinning) return;
+                    document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedHorseBet = index;
+                    initAudio(); playSound('tick');
+                };
+                horseBetButtons.appendChild(btn);
+
+                // Create Tracks
+                const lane = document.createElement('div'); lane.className = 'horse-lane';
+                lane.innerHTML = `<div class="horse-sprite" id="horseSprite${index}">🐎<div class="horse-name" style="border-color:${itemColor}; color:${itemColor};">${item}</div></div>`;
                 horseTracksArea.appendChild(lane);
             });
         }
@@ -617,11 +615,9 @@
                 const response = await fetch(`https://www.random.org/integers/?num=${count}&min=0&max=10000&col=1&base=10&format=plain&rnd=new`);
                 if (!response.ok) throw new Error('API limits reached');
                 const text = await response.text();
-                
                 if (text.includes('Error')) throw new Error('Quota Exceeded');
                 const numbers = text.trim().split(/\s+/).filter(n => n !== '').map(n => parseInt(n, 10));
                 if (numbers.length !== count || numbers.some(isNaN)) throw new Error('Bad Parse');
-                
                 return numbers.map(num => num % items.length);
             } catch (error) {
                 statusDiv.innerText = "API Offline. Using local backup RNG.";
@@ -629,10 +625,8 @@
             }
         }
 
-        async function spin(event) {
-            if (event) event.preventDefault();
+        async function spin(chargeInput) {
             if (isSpinning || items.length === 0 || items[0] === 'Empty') return;
-            initAudio(); 
 
             if (currentMode === 'slot' || currentMode === 'horse') {
                 const cost = COSTS[currentMode];
@@ -647,34 +641,35 @@
             isSpinning = true; toggleInputs(true);
             resultDiv.innerText = 'Calculating...'; resultDiv.classList.remove('winner-active', 'loser-active');
             magicTriangle.classList.remove('revealed');
-            
-            if(currentMode === 'slot') {
-                lever.classList.add('pulled'); playSound('clack');
-                setTimeout(() => lever.classList.remove('pulled'), 400);
-            } else if (currentMode === '8ball') {
-                ballWrapper.classList.add('shaking'); playSound('rumble');
-            }
+            playSound('clack');
             
             const numReq = currentMode === 'slot' ? 3 : 1;
             const winningIndices = await fetchTrueRandomIndices(numReq);
             statusDiv.innerText = "Revealing result...";
             
-            if (currentMode === 'wheel') animateWheel(winningIndices[0]);
-            else if (currentMode === 'slot') animateSlot(winningIndices);
+            if (currentMode === 'wheel') animateWheel(winningIndices[0], chargeInput);
+            else if (currentMode === 'slot') animateSlot(winningIndices, chargeInput);
             else if (currentMode === 'horse') animateHorse(winningIndices[0]);
             else if (currentMode === '8ball') animate8Ball(winningIndices[0]);
         }
 
         function toggleInputs(disabled) {
-            spinBtn.disabled = disabled; itemInput.disabled = disabled; modeSelect.disabled = disabled; horseBetSelect.disabled = disabled;
+            spinBtn.disabled = disabled; itemInput.disabled = disabled; modeSelect.disabled = disabled; 
+            document.querySelectorAll('.bet-btn').forEach(btn => btn.disabled = disabled);
         }
 
-        function animateWheel(winningIndex) {
-            const startTimestamp = performance.now(); const duration = 5000; const sliceDegree = 360 / items.length;
-            const targetDegree = 360 - (winningIndex * sliceDegree) - (sliceDegree / 2); 
-            const targetRotation = wheelRotation + (8 * 360) + targetDegree;
+        function animateWheel(winningIndex, charge) {
+            const startTimestamp = performance.now(); const chargeRatio = charge / 100;
+            const duration = 500 + (chargeRatio * 9500); const fullSpins = 1 + Math.floor(chargeRatio * 30); 
+            const sliceDegree = 360 / items.length;
+            const randomOffset = sliceDegree * (0.1 + Math.random() * 0.8);
+            const targetDegree = 360 - (winningIndex * sliceDegree) - randomOffset; 
+            const currentModulo = wheelRotation % 360;
+            const degreesToTarget = (targetDegree - currentModulo + 360) % 360;
+            const targetRotation = wheelRotation + (fullSpins * 360) + degreesToTarget;
+
             let lastTickSlice = Math.floor(wheelRotation / sliceDegree);
-            const easeOut = t => 1 - Math.pow(1 - t, 4);
+            const easeOut = t => 1 - Math.pow(1 - t, 5); 
 
             function step(timestamp) {
                 let progress = Math.min((timestamp - startTimestamp) / duration, 1);
@@ -688,29 +683,28 @@
                 }
                 if (progress < 1) requestAnimationFrame(step);
                 else {
-                    wheelRotation = targetRotation % 360; playSound('win-wheel');
-                    resultDiv.innerText = `Winner: ${items[winningIndex]}`; resultDiv.classList.add('winner-active');
-                    burstConfetti(); statusDiv.innerText = "Ready for another spin.";
-                    isSpinning = false; toggleInputs(false);
+                    canvas.style.transform = `rotate(${targetRotation}deg)`; wheelRotation = targetRotation % 360; 
+                    playSound('win-wheel'); resultDiv.innerText = `Winner: ${items[winningIndex]}`; 
+                    resultDiv.classList.add('winner-active'); burstConfetti(); 
+                    statusDiv.innerText = "Ready for another spin."; isSpinning = false; toggleInputs(false);
                 }
             }
             requestAnimationFrame(step);
         }
 
-        function animateSlot(winningIndices) {
-            const startTimestamp = performance.now();
-            const durations = [2000, 3500, 5000];
-            const baseCycles = Math.ceil(40 / items.length);
-            const cycles = [baseCycles, baseCycles + 4, baseCycles + 8]; 
+        function animateSlot(winningIndices, charge) {
+            const startTimestamp = performance.now(); const chargeRatio = charge / 100;
+            const baseDur = 500 + (chargeRatio * 7000); 
+            const durations = [baseDur, baseDur + (500 + chargeRatio*1000), baseDur + (1000 + chargeRatio*2000)];
+            const minCycles = 1; const extraCycles = Math.floor(chargeRatio * 20);
+            const cycles = [minCycles + extraCycles, minCycles + extraCycles + 1, minCycles + extraCycles + 2]; 
             
             const targetYs = winningIndices.map((winIdx, i) => {
                 const totalItems = (cycles[i] * items.length) + winIdx;
                 return -((totalItems * slotItemHeight) - 45);
             });
 
-            const startYs = [...slotTranslateY];
-            const easeOut = t => 1 - Math.pow(1 - t, 4);
-            
+            const startYs = [...slotTranslateY]; const easeOut = t => 1 - Math.pow(1 - t, 4);
             let lastTickItems = startYs.map(y => Math.floor(Math.abs(y - 45) / slotItemHeight));
             let reelStopped = [false, false, false]; 
 
@@ -736,7 +730,6 @@
                         slotTranslateY[i] = -((winningIndices[i] * slotItemHeight) - 45);
                         slotReels[i].style.transform = `translateY(${slotTranslateY[i]}px)`;
                     }
-                    
                     const [i1, i2, i3] = winningIndices;
                     if (i1 === i2 && i2 === i3) {
                         playSound('win-slot'); resultDiv.innerText = `🎰 JACKPOT: ${items[i1]}! 🎰`;
@@ -744,52 +737,39 @@
                     } else {
                         playSound('lose'); resultDiv.innerText = `No Match. Try Again!`; resultDiv.classList.add('loser-active');
                     }
-                    statusDiv.innerText = "Pull lever to spin again."; isSpinning = false; toggleInputs(false);
+                    statusDiv.innerText = "Hold lever to spin again."; isSpinning = false; toggleInputs(false);
                 }
             }
             requestAnimationFrame(step);
         }
 
         function animateHorse(winningIndex) {
-            const startTimestamp = performance.now();
-            const duration = 5000;
+            const startTimestamp = performance.now(); const duration = 5000;
             const containerWidth = document.querySelector('.horse-track-container').offsetWidth;
-            const maxDistance = containerWidth - 60; // Leave room for finish line and emoji
-            
-            // Give loser horses a random max distance they will reach (between 60% and 90% of track)
+            const maxDistance = containerWidth - 60; 
             const loserDistances = items.map(() => maxDistance * (0.6 + Math.random() * 0.3));
-            loserDistances[winningIndex] = maxDistance; // Winner goes full distance
-
+            loserDistances[winningIndex] = maxDistance; 
             const easeOut = t => 1 - Math.pow(1 - t, 3);
             let lastGallopTime = 0;
 
             function step(timestamp) {
                 let progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                
-                // Play gallop sound rhythmically
-                if (timestamp - lastGallopTime > 150 && progress < 1) {
-                    playSound('gallop'); lastGallopTime = timestamp;
-                }
+                if (timestamp - lastGallopTime > 150 && progress < 1) { playSound('gallop'); lastGallopTime = timestamp; }
 
                 items.forEach((_, i) => {
                     const sprite = document.getElementById(`horseSprite${i}`);
-                    // Basic eased movement
                     let currentX = loserDistances[i] * easeOut(progress);
-                    // Add a tiny random wobble to make it look like they are fighting for position
                     if (progress < 1) currentX += Math.sin((timestamp / 150) + i) * 15 * (1 - progress);
-                    
                     sprite.style.transform = `translateX(${currentX}px)`;
                 });
 
                 if (progress < 1) requestAnimationFrame(step);
                 else {
-                    const betIndex = parseInt(horseBetSelect.value, 10);
-                    if (betIndex === winningIndex) {
+                    if (selectedHorseBet === winningIndex) {
                         playSound('trumpet'); resultDiv.innerText = `🏆 YOU WON! ${items[winningIndex]} finished first!`;
                         resultDiv.classList.add('winner-active'); triggerWinUI(REWARDS.horse); burstConfetti();
                     } else {
-                        playSound('lose'); resultDiv.innerText = `You lost. ${items[winningIndex]} won.`;
-                        resultDiv.classList.add('loser-active');
+                        playSound('lose'); resultDiv.innerText = `You lost. ${items[winningIndex]} won.`; resultDiv.classList.add('loser-active');
                     }
                     statusDiv.innerText = "Place bet and start race."; isSpinning = false; toggleInputs(false);
                 }
@@ -809,24 +789,17 @@
             }, 1500);
         }
 
-        // --- CONFETTI SYSTEM ---
         const particleCanvas = document.getElementById('particleCanvas'); const pCtx = particleCanvas.getContext('2d');
         let particles = [];
         function resize() { particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
-
         class Particle {
             constructor(x, y) {
-                this.x = x; this.y = y; this.size = Math.random() * 8 + 4;
-                this.speedX = (Math.random() * 10 - 5) * 2; this.speedY = (Math.random() * -15 - 5);
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.angle = Math.random() * 360; this.spin = Math.random() * 10 - 5;
+                this.x = x; this.y = y; this.size = Math.random() * 8 + 4; this.speedX = (Math.random() * 10 - 5) * 2; this.speedY = (Math.random() * -15 - 5);
+                this.color = colors[Math.floor(Math.random() * colors.length)]; this.angle = Math.random() * 360; this.spin = Math.random() * 10 - 5;
             }
             update() { this.speedY += 0.4; this.x += this.speedX; this.y += this.speedY; this.angle += this.spin; this.size *= 0.98; }
-            draw() {
-                pCtx.save(); pCtx.translate(this.x, this.y); pCtx.rotate(this.angle * Math.PI / 180);
-                pCtx.fillStyle = this.color; pCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size); pCtx.restore();
-            }
+            draw() { pCtx.save(); pCtx.translate(this.x, this.y); pCtx.rotate(this.angle * Math.PI / 180); pCtx.fillStyle = this.color; pCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size); pCtx.restore(); }
         }
         function burstConfetti() {
             const rect = document.querySelector('.view-container').getBoundingClientRect();
