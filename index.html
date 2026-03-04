@@ -139,7 +139,6 @@
             background: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 6;
         }
 
-        /* NEW: Token Dashboard */
         .slot-dashboard {
             background: #0a0a0a; border: 3px solid #111; border-radius: 8px;
             padding: 8px; text-align: center; font-family: 'Courier New', Courier, monospace;
@@ -160,7 +159,6 @@
             to { background: #064e3b; box-shadow: inset 0 0 15px #10b981; }
         }
         
-        /* Lever */
         .lever-container {
             position: absolute; right: -50px; top: 50%; transform: translateY(-50%);
             width: 40px; height: 140px; cursor: pointer; touch-action: manipulation;
@@ -255,11 +253,7 @@
             </label>
             <textarea id="items" oninput="updateView()" placeholder="Enter items here...
 One per line
-Max 100 lines">
-foodcourt
-Tahiti
-Euphoria
-</textarea>
+Max 100 lines"></textarea>
             
             <button id="spinBtn" class="btn-spin" onclick="spin()">Spin Wheel</button>
             <div id="status" class="status">Waiting for input...</div>
@@ -345,21 +339,49 @@ Euphoria
         const maxItems = 100;
         const colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'];
 
-        // TOKEN ECONOMY
+        // --- LOCAL STORAGE & DATA HANDLING ---
+        
+        // Defaults
         let userTokens = 500;
         const COST_PER_SPIN = 10;
         const JACKPOT_REWARD = 5000;
+        const defaultItems = "Pizza\nBurgers\nSushi\nTacos\nSalad";
+
+        function loadData() {
+            // Load Mode
+            const savedMode = localStorage.getItem('trp_mode');
+            if (savedMode) modeSelect.value = savedMode;
+
+            // Load Items
+            const savedItems = localStorage.getItem('trp_items');
+            if (savedItems !== null) {
+                itemInput.value = savedItems;
+            } else {
+                itemInput.value = defaultItems; // Fallback if first time
+            }
+
+            // Load Tokens
+            const savedTokens = localStorage.getItem('trp_tokens');
+            if (savedTokens !== null) {
+                userTokens = parseInt(savedTokens, 10);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('trp_mode', modeSelect.value);
+            localStorage.setItem('trp_items', itemInput.value);
+            localStorage.setItem('trp_tokens', userTokens);
+        }
 
         function updateTokenUI() {
             tokenDisplay.innerText = `CREDITS: ${userTokens}`;
-            // Remove flash animation if present
             slotDashboard.classList.remove('dashboard-win');
+            saveData(); // Save whenever tokens update
         }
 
         function triggerJackpotUI() {
             userTokens += JACKPOT_REWARD;
             updateTokenUI();
-            // Force reflow to restart animation, then add class
             void slotDashboard.offsetWidth; 
             slotDashboard.classList.add('dashboard-win');
         }
@@ -459,7 +481,10 @@ Euphoria
         }
 
         function changeMode() {
-            initAudio(); currentMode = modeSelect.value; document.body.className = `theme-${currentMode}`;
+            initAudio(); 
+            currentMode = modeSelect.value; 
+            document.body.className = `theme-${currentMode}`;
+            
             wheelWrapper.style.display = currentMode === 'wheel' ? 'flex' : 'none';
             slotWrapper.style.display = currentMode === 'slot' ? 'flex' : 'none';
             ballWrapper.style.display = currentMode === '8ball' ? 'flex' : 'none';
@@ -472,18 +497,23 @@ Euphoria
             } else {
                 spinBtn.style.display = 'block'; spinBtn.innerText = "Spin Wheel"; statusDiv.innerText = "Ready to spin.";
             }
+            
+            saveData(); // Save mode change
             updateView();
         }
 
         function updateView() {
             if (isSpinning) return;
-            items = getParsedItems(); entryCount.innerText = `${items.length} / 100`;
+            items = getParsedItems(); 
+            entryCount.innerText = `${items.length} / 100`;
             resultDiv.innerText = ''; resultDiv.classList.remove('winner-active', 'loser-active');
             magicTriangle.classList.remove('revealed');
 
             if (currentMode === 'wheel') drawWheel();
             else if (currentMode === 'slot') drawSlot();
             else if (currentMode === '8ball') magicText.innerText = '';
+            
+            saveData(); // Save any text changes
         }
 
         function drawWheel() {
@@ -543,10 +573,8 @@ Euphoria
             if (isSpinning || items.length === 0 || items[0] === 'Empty') return;
             initAudio(); 
 
-            // Handle Slot Economy
             if (currentMode === 'slot') {
                 if (userTokens < COST_PER_SPIN) {
-                    // Safety Net Bailout
                     userTokens = 100;
                     playSound('win-8ball');
                     statusDiv.innerText = "Bankrupt! Casino granted 100 bailout credits.";
@@ -717,7 +745,10 @@ Euphoria
             particles.forEach((p, i) => { p.update(); p.draw(); if (p.size < 0.5) particles.splice(i, 1); });
             if (particles.length > 0) requestAnimationFrame(animateParticles);
         }
-        changeMode();
+        
+        // --- INITIALIZATION ---
+        loadData(); // Pull memory first
+        changeMode(); // Then apply visuals
     </script>
 </body>
 </html>
