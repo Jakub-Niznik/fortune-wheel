@@ -31,6 +31,7 @@
         body.theme-wheel { background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); }
         body.theme-slot { background: radial-gradient(circle at center, #450a0a 0%, #1a0202 100%); }
         body.theme-8ball { background: radial-gradient(circle at center, #170f2e 0%, #02010a 100%); }
+        body.theme-horse { background: radial-gradient(circle at center, #064e3b 0%, #022c22 100%); } /* Racing Green */
 
         h1 {
             font-size: clamp(1.8rem, 5vw, 2.5rem);
@@ -50,7 +51,7 @@
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(20px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            align-items: center;
+            align-items: stretch;
             z-index: 10;
             max-width: 1000px;
             width: 100%;
@@ -87,9 +88,27 @@
         .btn-spin:active { transform: scale(0.95); }
         .btn-spin:disabled, textarea:disabled, select:disabled { opacity: 0.5; cursor: not-allowed; }
 
+        /* --- TOKEN ECONOMY DASHBOARD --- */
+        .token-dashboard {
+            background: #0a0a0a; border: 3px solid #111; border-radius: 8px;
+            padding: 12px; text-align: center; font-family: 'Courier New', Courier, monospace;
+            box-shadow: inset 0 0 10px #000; transition: all 0.3s;
+            margin-top: auto; display: none; /* Hidden by default */
+        }
+        .token-display {
+            font-size: 1.6rem; font-weight: 900; color: #fbbf24; 
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.6); margin-bottom: 5px;
+        }
+        .token-info { font-size: 0.75rem; color: #888; font-weight: bold; }
+        .dashboard-win { animation: flash-jackpot 0.5s infinite alternate; }
+        @keyframes flash-jackpot {
+            from { background: #0a0a0a; }
+            to { background: #064e3b; box-shadow: inset 0 0 15px #10b981; }
+        }
+
         .view-container {
             position: relative; display: flex; align-items: center; justify-content: center;
-            width: 440px; height: 440px; flex-grow: 1;
+            width: 440px; height: 440px; flex-grow: 1; flex-direction: column;
         }
 
         /* --- WHEEL MODE --- */
@@ -110,93 +129,48 @@
         }
         .slot-lights {
             position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px;
-            border: 4px dashed #fbbf24; border-radius: 24px;
-            animation: flash 1s infinite alternate; pointer-events: none;
+            border: 4px dashed #fbbf24; border-radius: 24px; animation: flash 1s infinite alternate; pointer-events: none;
         }
-        @keyframes flash { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-        
         .slot-screen {
-            width: 100%; height: 180px; background: #000;
-            border-radius: 8px; position: relative; overflow: hidden;
+            width: 100%; height: 180px; background: #000; border-radius: 8px; position: relative; overflow: hidden;
             box-shadow: inset 0 0 30px rgba(0,0,0,1); flex-shrink: 0;
         }
         .reels-container { display: flex; width: 100%; height: 100%; position: relative; }
         .reel-divider { width: 6px; background: #111; box-shadow: inset 0 0 5px #000; z-index: 5; }
         .slot-reel { flex: 1; display: flex; flex-direction: column; }
-        
         .slot-item {
-            height: 90px; min-height: 90px; flex-shrink: 0; 
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; font-weight: 800; color: white;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8); text-align: center;
-            padding: 0 5px; box-sizing: border-box; width: 100%;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            height: 90px; min-height: 90px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 800; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.8); text-align: center;
+            padding: 0 5px; box-sizing: border-box; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        
         .slot-center-line {
-            position: absolute; top: 50%; left: 0; right: 0; height: 90px;
-            transform: translateY(-50%); border-top: 2px solid #ef4444; border-bottom: 2px solid #ef4444;
-            background: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 6;
+            position: absolute; top: 50%; left: 0; right: 0; height: 90px; transform: translateY(-50%);
+            border-top: 2px solid #ef4444; border-bottom: 2px solid #ef4444; background: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 6;
         }
-
-        .slot-dashboard {
-            background: #0a0a0a; border: 3px solid #111; border-radius: 8px;
-            padding: 8px; text-align: center; font-family: 'Courier New', Courier, monospace;
-            box-shadow: inset 0 0 10px #000; transition: all 0.3s;
-        }
-        .token-display {
-            font-size: 1.4rem; font-weight: 900; color: #fbbf24; 
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.6); margin-bottom: 2px;
-        }
-        .token-info {
-            font-size: 0.7rem; color: #666; font-weight: bold;
-        }
-        .dashboard-win {
-            animation: flash-jackpot 0.5s infinite alternate;
-        }
-        @keyframes flash-jackpot {
-            from { background: #0a0a0a; }
-            to { background: #064e3b; box-shadow: inset 0 0 15px #10b981; }
-        }
-        
         .lever-container {
             position: absolute; right: -50px; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 140px; cursor: pointer; touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            width: 40px; height: 140px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         .lever-base {
-            position: absolute; bottom: 20px; left: 0; width: 25px; height: 50px;
-            background: #555; border-radius: 8px; box-shadow: inset -2px -2px 5px #222;
+            position: absolute; bottom: 20px; left: 0; width: 25px; height: 50px; background: #555; border-radius: 8px; box-shadow: inset -2px -2px 5px #222;
         }
         .lever-stick {
-            position: absolute; bottom: 45px; left: 8px; width: 8px; height: 80px;
-            background: #ccc; transform-origin: bottom center; transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.6, 1);
+            position: absolute; bottom: 45px; left: 8px; width: 8px; height: 80px; background: #ccc; transform-origin: bottom center; transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.6, 1);
         }
         .lever-ball {
-            position: absolute; top: -15px; left: -11px; width: 30px; height: 30px;
-            background: #ef4444; border-radius: 50%; box-shadow: inset -3px -3px 8px #991b1b;
+            position: absolute; top: -15px; left: -11px; width: 30px; height: 30px; background: #ef4444; border-radius: 50%; box-shadow: inset -3px -3px 8px #991b1b;
         }
         .lever-container.pulled .lever-stick { transform: rotate(70deg); }
 
-        /* --- MAGIC 8-BALL MODE --- */
+        /* --- 8-BALL MODE --- */
         .ball-wrapper { display: none; align-items: center; justify-content: center; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         .magic-ball {
-            width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle at 80px 80px, #4a4a5a, #050505);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset -20px -20px 40px rgba(0,0,0,0.8);
-            display: flex; align-items: center; justify-content: center;
+            width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 80px 80px, #4a4a5a, #050505);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset -20px -20px 40px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
         }
         .ball-wrapper.shaking .magic-ball { animation: shake 0.4s infinite; }
-        @keyframes shake {
-            0% { transform: translate(2px, 2px) rotate(0deg); }
-            25% { transform: translate(-4px, 0px) rotate(-3deg); }
-            50% { transform: translate(3px, -3px) rotate(3deg); }
-            75% { transform: translate(-2px, 4px) rotate(-2deg); }
-            100% { transform: translate(2px, -2px) rotate(0deg); }
-        }
         .magic-window {
-            width: 150px; height: 150px; border-radius: 50%;
-            background: #00001a; border: 6px solid #111;
+            width: 150px; height: 150px; border-radius: 50%; background: #00001a; border: 6px solid #111;
             box-shadow: inset 0 0 20px #000; display: flex; align-items: center; justify-content: center; position: relative;
         }
         .magic-triangle {
@@ -205,16 +179,52 @@
         }
         .magic-triangle.revealed { opacity: 1; }
         .magic-text {
-            position: absolute; top: -75px; left: -40px; width: 80px;
-            text-align: center; color: #93c5fd; font-size: 13px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; height: 50px;
-            text-shadow: 0 0 5px rgba(147, 197, 253, 0.5); overflow: hidden;
+            position: absolute; top: -75px; left: -40px; width: 80px; text-align: center; color: #93c5fd; font-size: 13px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; height: 50px; text-shadow: 0 0 5px rgba(147, 197, 253, 0.5); overflow: hidden;
         }
+
+        /* --- HORSE RACING MODE --- */
+        .horse-wrapper { display: none; width: 100%; height: 100%; flex-direction: column; gap: 15px; }
+        
+        .horse-betting-panel {
+            background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .horse-track-container {
+            flex-grow: 1; background: #78350f; border: 6px solid #451a03; border-radius: 12px;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .horse-lane {
+            flex: 1; border-bottom: 2px dashed rgba(255,255,255,0.2); position: relative;
+            display: flex; align-items: center;
+        }
+        .horse-lane:last-child { border-bottom: none; }
+        .finish-line-visual {
+            position: absolute; right: 20px; top: 0; bottom: 0; width: 15px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #000 10px, #000 20px); z-index: 1;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+        }
+        .horse-sprite {
+            position: absolute; left: 5px; font-size: 2rem; z-index: 2; display: flex; align-items: center;
+            transform: translateX(0px); /* Animated via JS */
+        }
+        .horse-name {
+            font-size: 0.8rem; font-weight: bold; background: rgba(0,0,0,0.7); color: white;
+            padding: 3px 6px; border-radius: 4px; margin-left: -5px; margin-top: -15px; white-space: nowrap;
+            max-width: 80px; overflow: hidden; text-overflow: ellipsis; border: 1px solid #555;
+        }
+        /* Color coding horses */
+        .horse-lane:nth-child(1) .horse-name { border-color: #ef4444; color: #fca5a5;}
+        .horse-lane:nth-child(2) .horse-name { border-color: #3b82f6; color: #93c5fd;}
+        .horse-lane:nth-child(3) .horse-name { border-color: #10b981; color: #6ee7b7;}
+        .horse-lane:nth-child(4) .horse-name { border-color: #f59e0b; color: #fcd34d;}
+        .horse-lane:nth-child(5) .horse-name { border-color: #8b5cf6; color: #c4b5fd;}
 
         /* --- UI OVERLAYS --- */
         #result {
             margin-top: 20px; font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800;
-            min-height: 40px; text-align: center; z-index: 10; padding: 0 10px;
+            min-height: 40px; text-align: center; z-index: 10; padding: 0 10px; width: 100%;
         }
         .winner-active { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: #10b981; }
         .loser-active { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: #ef4444; }
@@ -222,11 +232,10 @@
         .status { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: -5px; }
         #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             .container { flex-direction: column; gap: 20px; padding: 20px; }
             .controls { width: 100%; }
-            .view-container { width: 100%; height: 360px; }
+            .view-container { width: 100%; height: 380px; }
             .wheel-wrapper { transform: scale(0.75); }
             .slot-wrapper { transform: scale(0.85); transform-origin: center center; margin-left: -10px; }
             .ball-wrapper { transform: scale(0.8); }
@@ -244,6 +253,7 @@
             <select id="modeSelect" onchange="changeMode()">
                 <option value="wheel">🎡 Circular Wheel</option>
                 <option value="slot">🎰 3-Reel Jackpot Slot</option>
+                <option value="horse">🐎 Horse Racing</option>
                 <option value="8ball">🎱 Magic 8-Ball</option>
             </select>
 
@@ -251,12 +261,15 @@
                 <span>Entries</span>
                 <span id="entryCount">0 / 100</span>
             </label>
-            <textarea id="items" oninput="updateView()" placeholder="Enter items here...
-One per line
-Max 100 lines"></textarea>
+            <textarea id="items" oninput="updateView()" placeholder="Enter items..."></textarea>
             
             <button id="spinBtn" class="btn-spin" onclick="spin()">Spin Wheel</button>
             <div id="status" class="status">Waiting for input...</div>
+
+            <div id="tokenDashboard" class="token-dashboard">
+                <div id="tokenDisplay" class="token-display">CREDITS: 500</div>
+                <div id="tokenInfo" class="token-info">SPIN: 10 🪙 | JACKPOT: 5000 🪙</div>
+            </div>
         </div>
 
         <div class="view-container">
@@ -271,23 +284,27 @@ Max 100 lines"></textarea>
                     <div class="slot-screen">
                         <div class="slot-center-line"></div>
                         <div class="reels-container">
-                            <div id="slotReel0" class="slot-reel"></div>
-                            <div class="reel-divider"></div>
-                            <div id="slotReel1" class="slot-reel"></div>
-                            <div class="reel-divider"></div>
+                            <div id="slotReel0" class="slot-reel"></div><div class="reel-divider"></div>
+                            <div id="slotReel1" class="slot-reel"></div><div class="reel-divider"></div>
                             <div id="slotReel2" class="slot-reel"></div>
                         </div>
                     </div>
-                    
-                    <div id="slotDashboard" class="slot-dashboard">
-                        <div id="tokenDisplay" class="token-display">CREDITS: 500</div>
-                        <div class="token-info">SPIN: 10 🪙 &nbsp;|&nbsp; JACKPOT: 5000 🪙</div>
-                    </div>
-
                     <div id="lever" class="lever-container" onclick="spin()" ontouchstart="spin()">
                         <div class="lever-base"></div>
                         <div class="lever-stick"><div class="lever-ball"></div></div>
                     </div>
+                </div>
+            </div>
+
+            <div id="horseWrapper" class="horse-wrapper">
+                <div class="horse-betting-panel">
+                    <label style="color:white; margin:0;">Place Your Bet:</label>
+                    <select id="horseBetSelect"></select>
+                </div>
+                <div class="horse-track-container">
+                    <div class="finish-line-visual"></div>
+                    <div id="horseTracksArea" style="display:flex; flex-direction:column; height:100%;">
+                        </div>
                 </div>
             </div>
 
@@ -315,56 +332,45 @@ Max 100 lines"></textarea>
         
         const wheelWrapper = document.getElementById('wheelWrapper');
         const slotWrapper = document.getElementById('slotWrapper');
+        const horseWrapper = document.getElementById('horseWrapper');
         const ballWrapper = document.getElementById('ballWrapper');
-        const slotDashboard = document.getElementById('slotDashboard');
+        
+        const tokenDashboard = document.getElementById('tokenDashboard');
         const tokenDisplay = document.getElementById('tokenDisplay');
+        const tokenInfo = document.getElementById('tokenInfo');
         
         const canvas = document.getElementById('wheel');
         const ctx = canvas.getContext('2d');
-        const slotReels = [
-            document.getElementById('slotReel0'),
-            document.getElementById('slotReel1'),
-            document.getElementById('slotReel2')
-        ];
+        const slotReels = [document.getElementById('slotReel0'), document.getElementById('slotReel1'), document.getElementById('slotReel2')];
         const lever = document.getElementById('lever');
+        const horseTracksArea = document.getElementById('horseTracksArea');
+        const horseBetSelect = document.getElementById('horseBetSelect');
         const magicTriangle = document.getElementById('magicTriangle');
         const magicText = document.getElementById('magicText');
 
         let items = [];
         let currentMode = 'wheel';
         let isSpinning = false;
+        
         let wheelRotation = 0;
         let slotTranslateY = [45, 45, 45]; 
         const slotItemHeight = 90;
         const maxItems = 100;
-        const colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'];
+        const colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#d946ef', '#f43f5e', '#84cc16', '#f97316'];
 
-        // --- LOCAL STORAGE & DATA HANDLING ---
-        
-        // Defaults
+        // TOKEN ECONOMY
         let userTokens = 500;
-        const COST_PER_SPIN = 10;
-        const JACKPOT_REWARD = 5000;
-        const defaultItems = "Pizza\nBurgers\nSushi\nTacos\nSalad";
+        const COSTS = { slot: 10, horse: 20 };
+        const REWARDS = { slot: 5000, horse: 250 };
+        const defaultItems = "foodcourt\nTahiti\nEuphoria";
 
         function loadData() {
-            // Load Mode
             const savedMode = localStorage.getItem('trp_mode');
             if (savedMode) modeSelect.value = savedMode;
-
-            // Load Items
             const savedItems = localStorage.getItem('trp_items');
-            if (savedItems !== null) {
-                itemInput.value = savedItems;
-            } else {
-                itemInput.value = defaultItems; // Fallback if first time
-            }
-
-            // Load Tokens
+            itemInput.value = savedItems !== null ? savedItems : defaultItems;
             const savedTokens = localStorage.getItem('trp_tokens');
-            if (savedTokens !== null) {
-                userTokens = parseInt(savedTokens, 10);
-            }
+            if (savedTokens !== null) userTokens = parseInt(savedTokens, 10);
         }
 
         function saveData() {
@@ -375,15 +381,15 @@ Max 100 lines"></textarea>
 
         function updateTokenUI() {
             tokenDisplay.innerText = `CREDITS: ${userTokens}`;
-            slotDashboard.classList.remove('dashboard-win');
-            saveData(); // Save whenever tokens update
+            tokenDashboard.classList.remove('dashboard-win');
+            saveData(); 
         }
 
-        function triggerJackpotUI() {
-            userTokens += JACKPOT_REWARD;
+        function triggerWinUI(reward) {
+            userTokens += reward;
             updateTokenUI();
-            void slotDashboard.offsetWidth; 
-            slotDashboard.classList.add('dashboard-win');
+            void tokenDashboard.offsetWidth; 
+            tokenDashboard.classList.add('dashboard-win');
         }
 
         // --- AUDIO SYSTEM ---
@@ -405,6 +411,28 @@ Max 100 lines"></textarea>
                 gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
                 osc.start(now); osc.stop(now + 0.05);
             } 
+            else if (type === 'gallop') {
+                // Low, rapid thuds for horse racing
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(80, now);
+                osc.frequency.exponentialRampToValueAtTime(20, now + 0.1);
+                gainNode.gain.setValueAtTime(0.5, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            }
+            else if (type === 'trumpet') {
+                // Horse race winning fanfare
+                const notes = [440, 554.37, 659.25, 880]; 
+                notes.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+                    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                    osc.type = 'square'; osc.frequency.value = freq;
+                    gainNode.gain.setValueAtTime(0, now + i * 0.15); 
+                    gainNode.gain.linearRampToValueAtTime(0.1, now + i * 0.15 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+                    osc.start(now + i * 0.15); osc.stop(now + i * 0.15 + 0.5);
+                });
+            }
             else if (type === 'clack') {
                 const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
                 osc.connect(gainNode); gainNode.connect(audioCtx.destination);
@@ -451,7 +479,7 @@ Max 100 lines"></textarea>
                     osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.15);
                 }
             }
-            else if (type === 'lose-slot') {
+            else if (type === 'lose') {
                 const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
                 osc.connect(gainNode); gainNode.connect(audioCtx.destination);
                 osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now);
@@ -477,43 +505,55 @@ Max 100 lines"></textarea>
             let rawLines = itemInput.value.split('\n').map(i => i.trim()).filter(i => i !== '');
             if (rawLines.length > maxItems) rawLines = rawLines.slice(0, maxItems);
             if (rawLines.length === 0) rawLines = ['Empty'];
+            
+            // Limit to 5 strictly for horse racing visual sanity
+            if (currentMode === 'horse') {
+                rawLines = rawLines.slice(0, 5);
+                if (rawLines.length < 2) rawLines.push('Ghost Horse'); // Needs at least 2 to race
+            }
             return rawLines;
         }
 
         function changeMode() {
-            initAudio(); 
-            currentMode = modeSelect.value; 
-            document.body.className = `theme-${currentMode}`;
+            initAudio(); currentMode = modeSelect.value; document.body.className = `theme-${currentMode}`;
             
             wheelWrapper.style.display = currentMode === 'wheel' ? 'flex' : 'none';
             slotWrapper.style.display = currentMode === 'slot' ? 'flex' : 'none';
+            horseWrapper.style.display = currentMode === 'horse' ? 'flex' : 'none';
             ballWrapper.style.display = currentMode === '8ball' ? 'flex' : 'none';
             
             if (currentMode === 'slot') {
                 spinBtn.style.display = 'none'; statusDiv.innerText = "Pull the lever to spin.";
-                updateTokenUI();
+                tokenDashboard.style.display = 'block';
+                tokenInfo.innerText = `SPIN: ${COSTS.slot} 🪙 | JACKPOT: ${REWARDS.slot} 🪙`;
+            } else if (currentMode === 'horse') {
+                spinBtn.style.display = 'block'; spinBtn.innerText = "Start Race!"; statusDiv.innerText = "Place bet and start race.";
+                tokenDashboard.style.display = 'block';
+                tokenInfo.innerText = `BET: ${COSTS.horse} 🪙 | WIN: ${REWARDS.horse} 🪙`;
             } else if (currentMode === '8ball') {
-                spinBtn.style.display = 'block'; spinBtn.innerText = "Shake 8-Ball"; statusDiv.innerText = "Tap or shake the ball to reveal.";
+                spinBtn.style.display = 'block'; spinBtn.innerText = "Shake 8-Ball"; statusDiv.innerText = "Tap or shake the ball.";
+                tokenDashboard.style.display = 'none';
             } else {
                 spinBtn.style.display = 'block'; spinBtn.innerText = "Spin Wheel"; statusDiv.innerText = "Ready to spin.";
+                tokenDashboard.style.display = 'none';
             }
             
-            saveData(); // Save mode change
-            updateView();
+            saveData(); updateTokenUI(); updateView();
         }
 
         function updateView() {
             if (isSpinning) return;
             items = getParsedItems(); 
-            entryCount.innerText = `${items.length} / 100`;
+            entryCount.innerText = currentMode === 'horse' ? `${items.length} (Max 5)` : `${items.length} / 100`;
             resultDiv.innerText = ''; resultDiv.classList.remove('winner-active', 'loser-active');
             magicTriangle.classList.remove('revealed');
 
             if (currentMode === 'wheel') drawWheel();
             else if (currentMode === 'slot') drawSlot();
+            else if (currentMode === 'horse') drawHorse();
             else if (currentMode === '8ball') magicText.innerText = '';
             
-            saveData(); // Save any text changes
+            saveData(); 
         }
 
         function drawWheel() {
@@ -545,8 +585,29 @@ Max 100 lines"></textarea>
                         reel.appendChild(div);
                     });
                 }
-                slotTranslateY[reelIdx] = 45; 
-                reel.style.transform = `translateY(45px)`;
+                slotTranslateY[reelIdx] = 45; reel.style.transform = `translateY(45px)`;
+            });
+        }
+
+        function drawHorse() {
+            horseTracksArea.innerHTML = '';
+            horseBetSelect.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                // Populate Betting Dropdown
+                const opt = document.createElement('option');
+                opt.value = index; opt.innerText = item;
+                horseBetSelect.appendChild(opt);
+
+                // Populate Track Lanes
+                const lane = document.createElement('div');
+                lane.className = 'horse-lane';
+                lane.innerHTML = `
+                    <div class="horse-sprite" id="horseSprite${index}">
+                        🐎<div class="horse-name">${item}</div>
+                    </div>
+                `;
+                horseTracksArea.appendChild(lane);
             });
         }
 
@@ -557,7 +618,7 @@ Max 100 lines"></textarea>
                 if (!response.ok) throw new Error('API limits reached');
                 const text = await response.text();
                 
-                if (text.includes('Error')) throw new Error('API Quota Exceeded');
+                if (text.includes('Error')) throw new Error('Quota Exceeded');
                 const numbers = text.trim().split(/\s+/).filter(n => n !== '').map(n => parseInt(n, 10));
                 if (numbers.length !== count || numbers.some(isNaN)) throw new Error('Bad Parse');
                 
@@ -573,16 +634,14 @@ Max 100 lines"></textarea>
             if (isSpinning || items.length === 0 || items[0] === 'Empty') return;
             initAudio(); 
 
-            if (currentMode === 'slot') {
-                if (userTokens < COST_PER_SPIN) {
-                    userTokens = 100;
-                    playSound('win-8ball');
+            if (currentMode === 'slot' || currentMode === 'horse') {
+                const cost = COSTS[currentMode];
+                if (userTokens < cost) {
+                    userTokens = 100; playSound('win-8ball');
                     statusDiv.innerText = "Bankrupt! Casino granted 100 bailout credits.";
-                    updateTokenUI();
-                    return; 
+                    updateTokenUI(); return; 
                 }
-                userTokens -= COST_PER_SPIN;
-                updateTokenUI();
+                userTokens -= cost; updateTokenUI();
             }
 
             isSpinning = true; toggleInputs(true);
@@ -602,11 +661,12 @@ Max 100 lines"></textarea>
             
             if (currentMode === 'wheel') animateWheel(winningIndices[0]);
             else if (currentMode === 'slot') animateSlot(winningIndices);
+            else if (currentMode === 'horse') animateHorse(winningIndices[0]);
             else if (currentMode === '8ball') animate8Ball(winningIndices[0]);
         }
 
         function toggleInputs(disabled) {
-            spinBtn.disabled = disabled; itemInput.disabled = disabled; modeSelect.disabled = disabled;
+            spinBtn.disabled = disabled; itemInput.disabled = disabled; modeSelect.disabled = disabled; horseBetSelect.disabled = disabled;
         }
 
         function animateWheel(winningIndex) {
@@ -658,13 +718,7 @@ Max 100 lines"></textarea>
                 let allDone = true;
                 for(let i=0; i < 3; i++) {
                     let progress = Math.min((timestamp - startTimestamp) / durations[i], 1);
-                    
-                    if (progress < 1) {
-                        allDone = false;
-                    } else if (!reelStopped[i]) {
-                        reelStopped[i] = true;
-                        playSound('stop'); 
-                    }
+                    if (progress < 1) { allDone = false; } else if (!reelStopped[i]) { reelStopped[i] = true; playSound('stop'); }
                     
                     let currentFrameY = startYs[i] + (targetYs[i] - startYs[i]) * easeOut(progress);
                     slotReels[i].style.transform = `translateY(${currentFrameY}px)`;
@@ -676,9 +730,8 @@ Max 100 lines"></textarea>
                     }
                 }
 
-                if (!allDone) {
-                    requestAnimationFrame(step);
-                } else {
+                if (!allDone) requestAnimationFrame(step);
+                else {
                     for(let i=0; i<3; i++) {
                         slotTranslateY[i] = -((winningIndices[i] * slotItemHeight) - 45);
                         slotReels[i].style.transform = `translateY(${slotTranslateY[i]}px)`;
@@ -686,19 +739,59 @@ Max 100 lines"></textarea>
                     
                     const [i1, i2, i3] = winningIndices;
                     if (i1 === i2 && i2 === i3) {
-                        playSound('win-slot'); 
-                        resultDiv.innerText = `🎰 JACKPOT: ${items[i1]}! 🎰`;
-                        resultDiv.classList.add('winner-active'); 
-                        triggerJackpotUI();
-                        burstConfetti();
+                        playSound('win-slot'); resultDiv.innerText = `🎰 JACKPOT: ${items[i1]}! 🎰`;
+                        resultDiv.classList.add('winner-active'); triggerWinUI(REWARDS.slot); burstConfetti();
                     } else {
-                        playSound('lose-slot'); 
-                        resultDiv.innerText = `No Match. Try Again!`;
+                        playSound('lose'); resultDiv.innerText = `No Match. Try Again!`; resultDiv.classList.add('loser-active');
+                    }
+                    statusDiv.innerText = "Pull lever to spin again."; isSpinning = false; toggleInputs(false);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        function animateHorse(winningIndex) {
+            const startTimestamp = performance.now();
+            const duration = 5000;
+            const containerWidth = document.querySelector('.horse-track-container').offsetWidth;
+            const maxDistance = containerWidth - 60; // Leave room for finish line and emoji
+            
+            // Give loser horses a random max distance they will reach (between 60% and 90% of track)
+            const loserDistances = items.map(() => maxDistance * (0.6 + Math.random() * 0.3));
+            loserDistances[winningIndex] = maxDistance; // Winner goes full distance
+
+            const easeOut = t => 1 - Math.pow(1 - t, 3);
+            let lastGallopTime = 0;
+
+            function step(timestamp) {
+                let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                
+                // Play gallop sound rhythmically
+                if (timestamp - lastGallopTime > 150 && progress < 1) {
+                    playSound('gallop'); lastGallopTime = timestamp;
+                }
+
+                items.forEach((_, i) => {
+                    const sprite = document.getElementById(`horseSprite${i}`);
+                    // Basic eased movement
+                    let currentX = loserDistances[i] * easeOut(progress);
+                    // Add a tiny random wobble to make it look like they are fighting for position
+                    if (progress < 1) currentX += Math.sin((timestamp / 150) + i) * 15 * (1 - progress);
+                    
+                    sprite.style.transform = `translateX(${currentX}px)`;
+                });
+
+                if (progress < 1) requestAnimationFrame(step);
+                else {
+                    const betIndex = parseInt(horseBetSelect.value, 10);
+                    if (betIndex === winningIndex) {
+                        playSound('trumpet'); resultDiv.innerText = `🏆 YOU WON! ${items[winningIndex]} finished first!`;
+                        resultDiv.classList.add('winner-active'); triggerWinUI(REWARDS.horse); burstConfetti();
+                    } else {
+                        playSound('lose'); resultDiv.innerText = `You lost. ${items[winningIndex]} won.`;
                         resultDiv.classList.add('loser-active');
                     }
-                    
-                    statusDiv.innerText = "Pull lever to spin again.";
-                    isSpinning = false; toggleInputs(false);
+                    statusDiv.innerText = "Place bet and start race."; isSpinning = false; toggleInputs(false);
                 }
             }
             requestAnimationFrame(step);
@@ -746,9 +839,7 @@ Max 100 lines"></textarea>
             if (particles.length > 0) requestAnimationFrame(animateParticles);
         }
         
-        // --- INITIALIZATION ---
-        loadData(); // Pull memory first
-        changeMode(); // Then apply visuals
+        loadData(); changeMode();
     </script>
 </body>
 </html>
